@@ -1,0 +1,49 @@
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Parameters
+N = 11
+L = 1.0
+h = L / (N - 1)
+
+# Grid
+x_dom = np.arange(N) * h
+
+# Initial condition
+T = np.zeros(N)
+
+# Boundary conditions
+T[0] = 0.0
+T[N-1] = 1.0
+
+# Convergence settings
+epsilon = 1e-8
+numerical_error = 1.0
+iterations = 0
+
+# Gauss-Seidel iteration
+while numerical_error > epsilon:
+    numerical_error = 0.0
+    
+    for i in range(1, N-1):
+        T_0 = T[i]
+        T[i] = 0.5 * (T[i-1] + T[i+1])
+        numerical_error += abs(T[i] - T_0)
+    
+    iterations += 1
+
+# Plot
+plt.figure(figsize=(6,5))
+plt.plot(x_dom, T, 'g-', linewidth=2)
+plt.scatter(x_dom, T, color='black')
+
+plt.grid(True)
+plt.xlabel("Position", size=14)
+plt.ylabel("Temperature", size=14)
+plt.title("1D Steady-State Heat Conduction")
+
+plt.show()
+
+print("Iterations:", iterations)
+print("Solution:", T)
+print(x_dom)
